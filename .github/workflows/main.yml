@@ -1,0 +1,33 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Kubernetes CLI
+      uses: azure/k8s-set-context@v1
+      with:
+        kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
+
+    - name: Pull Docker image
+      run: docker pull snkarhale/argoimg:latest
+
+    - name: Tag Docker image
+      run: docker tag latest snkarhale/argoimg:v1
+
+    - name: Push Docker image to registry
+      run: docker push snkarhale/latest:v1
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl create deployment argo --image=snkarhale/latest:v1 --dry-run=client -o yaml > test.yaml
+        kubectl apply -f test.yaml
