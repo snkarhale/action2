@@ -27,7 +27,4 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.REMOTE_PORT }}  # Optional: specify if using a non-standard SSH port
-        script: |
-          echo "Running a Linux command remotely"
-          ansible-playbook opt/argo.yaml
-          
+        run: ansible-playbook /opt/argo.yaml
