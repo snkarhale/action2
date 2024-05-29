@@ -21,10 +21,10 @@ jobs:
     #    SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
 
     - name: Run ansible playbook
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.HOST_IP }}
         username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PASSWORD }}
+        password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.REMOTE_PORT }}  # Optional: specify if using a non-standard SSH port
-        run: ansible-playbook /opt/argo.yaml
+        script: ansible-playbook /opt/argo.yaml
