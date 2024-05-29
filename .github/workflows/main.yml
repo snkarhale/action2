@@ -1,30 +1,16 @@
-name: Deploy with Ansible
-
-on:
-  push:
-    branches:
-      - master
-
+name: remote ssh command
+on: [push]
 jobs:
-  deploy:
+
+  build:
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
-    #- name: Run Ansible playbook
-    #  run: ansible-playbook -i ${{ secrets.HOST_IP }} -u ${{ secrets.SSH_USERNAME }} opt/argo.yaml
-    #  env:
-    #    SSH_PASSWORD: ${{ secrets.SSH_PRIVATE_KEY }}
-    #    HOST_IP: ${{ secrets.HOST_IP }}
-    #    SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-
-    - name: Run ansible playbook
+    - name: Run playbook on ansible server
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.HOST_IP }}
         username: ${{ secrets.SSH_USERNAME }}
         password: ${{ secrets.SSH_PASSWORD }}
-        port: ${{ secrets.REMOTE_PORT }}  # Optional: specify if using a non-standard SSH port
+        port: ${{ secrets.REMOTE_PORT }}
         script: ansible-playbook /opt/argo.yaml
